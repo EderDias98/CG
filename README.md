@@ -2,23 +2,6 @@
 
 Este repositório contém a implementação dos laboratórios e trabalhos da disciplina **Computação Gráfica**. O objetivo da disciplina é estudar os fundamentos e técnicas da computação gráfica, abordando a criação e manipulação de gráficos em 2D e 3D, além da aplicação de algoritmos gráficos em várias áreas.
 
-## Estrutura do Repositório
-
-O repositório está organizado de acordo com os laboratórios e trabalhos realizados na disciplina, incluindo implementações de algoritmos gráficos e visualizações em 2D/3D.
-
-├── laboratorio_1/
-│ ├── transformacoes_geometricas/
-│ ├── projecoes/
-│ └── README.md
-├── laboratorio_2/
-│ ├── algoritmos_lineares/
-│ ├── sombreamento/
-│ └── README.md
-├── trabalho_1/
-│ ├── renderizacao_3d/
-│ ├── README.md
-└── README.md
-
 
 
 ## Tópicos Abordados
