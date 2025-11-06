@@ -22,12 +22,27 @@ void Robo::DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat 
 
 void Robo::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B)
 {
+    glColor3f(R, G, B);      // Define a cor dos pontos
+    glPointSize(4.0f);       // Define o tamanho do ponto (pode ajustar)
+    
+    glBegin(GL_POINTS);      // Desenha pontos individuais
+    for (int ang = 0; ang < 360; ang += 20) {
+        float rad = ang * M_PI / 180.0;     // Converte graus → radianos
+        float x = radius * cos(rad);        // Coordenada x do ponto
+        float y = radius * sin(rad);        // Coordenada y do ponto
+        glVertex2f(x, y);                   // Envia o ponto para o OpenGL
+    }
+    glEnd();
 
 }
 
 void Robo::DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B)
 {
-
+    glPushMatrix();
+    glTranslatef(x, y, 0.0);
+    glRotatef(thetaWheel, 0, 0, 1.0);
+    DesenhaCirc(10, 1.0, 1.0, 1.0);
+    glPopMatrix();
 }
 
 void Robo::DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2, GLfloat theta3)
@@ -37,15 +52,37 @@ void Robo::DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2, GL
 
     // 1. ---- Haste 1 (Azul) ----
     
+
+
+     
+       // Rotaciona a primeira haste
+
+
     // Move para a posição inicial do braço (o "ombro")
     glTranslatef(x, y, 0.0); // [cite: 56]
     
-    // Rotaciona a primeira haste
     glRotatef(theta1, 0, 0, 1.0); // [cite: 58]
+ 
     
     // Desenha a primeira haste (azul)
     // Usamos a mesma função, mas com as dimensões e cor do braço
     DesenhaRect(paddleHeight, paddleWidth, 0.0, 0.0, 1.0); // [cite: 62]
+
+    // desenhar haste amarela
+    glTranslatef(0, paddleHeight, 0.0); 
+
+    glRotatef(theta2, 0, 0, 1.0); // [cite: 58]
+
+    DesenhaRect(paddleHeight, paddleWidth, 1.0, 1.0, 0.0); // [cite: 62]
+
+    //desenhar haste verde
+    
+    glTranslatef(0, paddleHeight, 0.0); 
+
+    glRotatef(theta3, 0, 0, 1.0); // [cite: 58]
+
+    DesenhaRect(paddleHeight, paddleWidth, 0.0, 1.0, 0.0); // [cite: 62]
+
 
     // 4. ---- Finalização ----
     
@@ -73,6 +110,15 @@ void Robo::DesenhaRobo(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat theta1,
 
     // (Aqui virá a DesenhaRoda)
 
+    GLfloat deslocamentoLateral = baseWidth / 2.0; // distância das rodas
+    GLfloat alturaRoda = 0;             // altura abaixo do corpo
+
+    // Roda esquerda (amarela)
+    DesenhaRoda(-deslocamentoLateral, alturaRoda, gThetaWheel, 1.0, 1.0, 0.0);
+
+    // Roda direita (amarela)
+    DesenhaRoda(deslocamentoLateral, alturaRoda, gThetaWheel, 1.0, 1.0, 0.0);
+
     // 4. Restaura o S.C. do Mundo
     glPopMatrix();
 
@@ -80,17 +126,18 @@ void Robo::DesenhaRobo(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat theta1,
 
 void Robo::RodaBraco1(GLfloat inc)
 {
+    this->gTheta1 += inc;
 
 }
 
 void Robo::RodaBraco2(GLfloat inc)
 {
-
+    this->gTheta2 += inc;
 }
 
 void Robo::RodaBraco3(GLfloat inc)
 {
-
+    this->gTheta3 += inc;
 }
 
 void Robo::MoveEmX(GLfloat dx)
@@ -98,6 +145,7 @@ void Robo::MoveEmX(GLfloat dx)
 // A função idle chama isso ao apertar 'a' ou 'd' [cite: 45]
     // Apenas altera o estado (a variável gX) do robô [cite: 47]
     this->gX += dx;
+    this->gThetaWheel += (dx / (2 * M_PI * radiusWheel)) * 360.0f;
 }
 
 //Funcao auxiliar de rotacao
